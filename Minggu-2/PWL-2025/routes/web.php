@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\AboutController;
+use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\PhotoController;
+use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,11 +21,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/hello', function () {
-    return 'Hello World';
-});
-
-// Route::get('/hello', [WelcomeController::class,'hello']);
+// Route::get('/hello', function () {
+//     return 'Hello World';
+// });
 
 Route::get('mahasiswa', function ($id) {
 });
@@ -72,3 +74,10 @@ Route::get('/artikel/{id}', function ($id) {
 Route::get('/user/{name?}', function ($name = 'Taufik') {
     return 'Nama saya ' . $name;
 });
+
+Route::get('/hello', [WelcomeController::class, 'hello']);
+Route::get('/', [WelcomeController::class, 'index']);
+Route::get('/about', [AboutController::class, 'index']);
+Route::get('/articles/{id}', [ArticleController::class, 'index']);
+
+Route::resource('photos', PhotoController::class);
