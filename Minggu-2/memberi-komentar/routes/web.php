@@ -1,7 +1,9 @@
 <?php
 
-use App\Http\Controllers\ItemController;
+use App\Http\Controllers\ItemController; //import class ItemController dari Laravel
 use Illuminate\Support\Facades\Route;
+
+//import class Route dari Laravel
 
 /*
 |--------------------------------------------------------------------------
@@ -13,9 +15,9 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
+//route awal default larave;
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('items', ItemController::class);
+Route::resource('items', ItemController::class); //membuat route resource untuk items dari ItemController
