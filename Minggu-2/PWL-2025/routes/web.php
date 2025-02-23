@@ -75,9 +75,18 @@ Route::get('/user/{name?}', function ($name = 'Taufik') {
     return 'Nama saya ' . $name;
 });
 
-Route::get('/hello', [WelcomeController::class, 'hello']);
+// Route::get('/hello', [WelcomeController::class, 'hello']);
 Route::get('/', [WelcomeController::class, 'index']);
 Route::get('/about', [AboutController::class, 'index']);
 Route::get('/articles/{id}', [ArticleController::class, 'index']);
 
 Route::resource('photos', PhotoController::class);
+
+// Route::get('/greeting', function () {
+//     return view('hello', ['name' => 'Taufik']);
+// });
+
+Route::get('/greeting', [
+    WelcomeCOntroller::class,
+    'greeting',
+]);
