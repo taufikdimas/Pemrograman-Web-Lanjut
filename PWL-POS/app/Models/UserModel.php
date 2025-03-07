@@ -13,4 +13,6 @@ class UserModel extends Model
 
     //JS4: Pratikum 1
     protected $fillable = ['level_id', 'username', 'nama', 'password'];
+    // protected $fillable = ['level_id', 'username', 'nama']; error karena masih ada password pada User Controller
+
 }

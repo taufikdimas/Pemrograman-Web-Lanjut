@@ -2,7 +2,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\UserModel;
-use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -21,16 +20,24 @@ class UserController extends Controller
         // UserModel::where('username', 'customer-1')->update($data);
 
         //JS4: Pratikum 1
-        $data = [
-            'level_id' => 2,
-            'username' => 'manager_dua',
-            'nama'     => 'Manager 2',
-            'password' => Hash::make('12345'),
-        ];
-        UserModel::create($data);
+        // $data = [
+        //     'level_id' => 2,
+        //     'username' => 'manager_dua',
+        //     'nama'     => 'Manager 2',
+        //     'password' => Hash::make('12345'),
+        // ];
+        // UserModel::create($data);
+
+        // JS4: Pratikum 2.1
+        // $user = UserModel::find(1);
+        // $user = UserModel::where('level_id', 1)->first();
+        // $user = UserModel::firstWhere('level_id', 1);
+        $user = UserModel::findOr(20, ['username', 'nama'], function () {
+            abort(404);
+        });
 
         //akses user model
-        $user = UserModel::all();
+        // $user = UserModel::all();
         return view('user', ['data' => $user]);
     }
 }
