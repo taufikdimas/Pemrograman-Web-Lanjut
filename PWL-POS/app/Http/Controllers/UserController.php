@@ -45,16 +45,16 @@ class UserController extends Controller
         // dd($user);
 
         // JS4: Praktimum 2.4
-        $user = UserModel::firstOrCreate(
-            [
-                'username' => 'manager',
-                'nama'     => 'Manager',
-                // 'username' => 'manager22',
-                // 'nama'     => 'Manager Dua Dua',
-                // 'password' => Hash::make('12345'),
-                // 'level_id' => 2,
-            ],
-        );
+        // $user = UserModel::firstOrCreate(
+        //     [
+        //         'username' => 'manager',
+        //         'nama'     => 'Manager',
+        //         'username' => 'manager22',
+        //         'nama'     => 'Manager Dua Dua',
+        //         'password' => Hash::make('12345'),
+        //         'level_id' => 2,
+        //     ],
+        // );
         // $user = UserModel::firstOrNew(
         //     [
         //         'username' => 'manager33',
@@ -66,7 +66,7 @@ class UserController extends Controller
         // $user->save();
 
         //akses user model
-        // $user = UserModel::all();
+        $user = UserModel::all();
         return view('user', ['data' => $user]);
     }
 }
