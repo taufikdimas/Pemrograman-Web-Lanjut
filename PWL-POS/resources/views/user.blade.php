@@ -65,8 +65,8 @@
                 <td>{{ $d->nama }}</td>
                 <td>{{ $d->level_id }}</td>
                 {{-- JS4: Praktikum 2.7 --}}
-                {{-- <td> {{ $d->level->level_kode }} </td> --}}
-                {{-- <td> {{ $d->level->level_nama }} </td> --}}
+                <td> {{ $d->level->level_kode }} </td>
+                <td> {{ $d->level->level_nama }} </td>
                 <td><a href="/user/ubah/{{ $d->user_id }}">Ubah</a> | <a
                         href="/user/hapus/{{ $d->user_id }}">Hapus</a></td>
             </tr>
