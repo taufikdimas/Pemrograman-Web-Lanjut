@@ -6,9 +6,6 @@ use Illuminate\Support\Facades\DB;
 
 class KategoriSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         $data = [
