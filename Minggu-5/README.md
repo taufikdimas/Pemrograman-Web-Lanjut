@@ -492,14 +492,14 @@ npm install -D sass
 
    ### Output:
 
-   ![alt text](ss/4.2.png)
+   ![alt text](img/4.2.png)
 
 3. Tambahkan action edit di datatables dan buat halaman edit serta controllernya
 
    - Action Edit DataTables
-     ![alt text](ss/4.4.png)
+     ![alt text](img/4.4.png)
    - Halaman Edit
-     ![alt text](ss/4.3.png)
+     ![alt text](img/4.5.png)
    - Controller
 
      ```php
@@ -523,13 +523,14 @@ npm install -D sass
 4. Tambahkan action delete di datatables serta controllernya
 
    - Action Delete DataTables
-     ![alt text](ss/4.6.png)
+     ![alt text](img/4.6.png)
    - Controller
 
      ```php
-     public function destroy($id) {
-        KategoriModel::destroy($id);
-
+     public function delete($id)
+     {
+        $row = KategoriModel::findOrFail($id);
+        $row->delete();
         return redirect('/kategori');
      }
      ```
