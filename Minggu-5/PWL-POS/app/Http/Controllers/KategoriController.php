@@ -28,23 +28,46 @@ class KategoriController extends Controller
 
     // public function edit($id)
     // {
-    //     $row = KategoriModel::findOrFail($id);
-    //     return view('kategori.edit', ['data' => $row]);
+    //     $data = KategoriModel::findOrFail($id);
+    //     return view('kategori.edit', compact('data'));
     // }
 
     // public function update(Request $request, $id)
     // {
-    //     $row                = KategoriModel::findOrFail($id);
-    //     $row->kategori_kode = $request->kodeKategori;
-    //     $row->kategori_nama = $request->namaKategori;
-    //     $row->save();
+    //     $kategori = KategoriModel::findOrFail($id);
+    //     $kategori->update([
+    //         'kategori_kode' => $request->kodeKategori,
+    //         'kategori_nama' => $request->namaKategori,
+    //     ]);
+
     //     return redirect('/kategori');
     // }
 
-    // public function delete($id)
-    // {
-    //     $row = KategoriModel::findOrFail($id);
-    //     $row->delete();
-    //     return redirect('/kategori');
-    // }
+    public function edit($id)
+    {
+        $kategori = KategoriModel::findOrFail($id);
+        return view('kategori.edit', compact('kategori'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'kodeKategori' => 'required|max:255',
+            'namaKategori' => 'required|max:255',
+        ]);
+
+        $kategori = KategoriModel::findOrFail($id);
+        $kategori->update([
+            'kategori_kode' => $request->kodeKategori,
+            'kategori_nama' => $request->namaKategori,
+        ]);
+
+        return redirect()->route('kategori.index')->with('success', 'Kategori berhasil diperbarui');
+    }
+    public function delete($id)
+    {
+        $row = KategoriModel::findOrFail($id);
+        $row->delete();
+        return redirect('/kategori');
+    }
 }

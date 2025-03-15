@@ -20,12 +20,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/kategori', [KategoriController::class, 'index']);
-Route::get('/kategori/create', [KategoriController::class, 'create']);
+Route::get('/kategori', [KategoriController::class, 'index'])->name('kategori.index');
 Route::post('/kategori', [KategoriController::class, 'store']);
-Route::get('/kategori/edit/{id}', [KategoriController::class, 'edit']);
-Route::put('/kategori/edit/{id}', [KategoriController::class, 'update']);
-Route::get('/kategori/hapus/{id}', [KategoriController::class, 'delete']);
+Route::get('/kategori/create', [KategoriController::class, 'create'])->name('kategori.create');
+Route::get('kategori/{id}/edit', [KategoriController::class, 'edit'])->name('kategori.edit');
+Route::put('kategori/{id}', [KategoriController::class, 'update'])->name('kategori.update');
+Route::delete('/kategori/{id}', [KategoriController::class, 'delete'])->name('kategori.delete');
 
 // JS4: Praktikum 2.6
 Route::get('/level', [LevelController::class, 'index']);
