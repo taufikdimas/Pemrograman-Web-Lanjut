@@ -6,50 +6,50 @@
 
 ## Praktikum 1 - Integrasi Laravel dengan AdminLte3
 
-- **Menginstal AdminLTE**
+1. **Menginstal AdminLTE**
 
-  ```bash
-    composer require jeroennoten/laravel-adminlte
+```bash
+  composer require jeroennoten/laravel-adminlte
 
-    php artisan adminlte:install
+  php artisan adminlte:install
+```
+
+2. **Konfigurasi AdminLTE**
+
+- `resources/views/layouts/app.blade.php`:
+  ```php
+  @extends('adminlte::page')
+  @section('title', 'Dashboard')
+  @section('content')
+      <h1>Selamat datang di Dashboard</h1>
+  @endsection
   ```
+- `resources/views/welcome.blade.php`:
 
-- **Konfigurasi AdminLTE**
+  ```php
+  @extends('layout.app')
 
-  - `resources/views/layouts/app.blade.php`:
-    ```php
-    @extends('adminlte::page')
-    @section('title', 'Dashboard')
-    @section('content')
-        <h1>Selamat datang di Dashboard</h1>
-    @endsection
-    ```
-  - `resources/views/welcome.blade.php`:
+  {{-- Customize layout sections --}}
+  @section('subtitle', 'Welcome')
+  @section('content_header_title', 'Home')
+  @section('content_header_subtitle', 'Welcome')
 
-    ```php
-    @extends('layout.app')
+  {{-- Content body: main page content --}}
+  @section('content_body')
+      <p>Welcome to this beautiful admin panel.</p>
+  @stop
 
-    {{-- Customize layout sections --}}
-    @section('subtitle', 'Welcome')
-    @section('content_header_title', 'Home')
-    @section('content_header_subtitle', 'Welcome')
+  {{-- Push extra CSS --}}
+  @push('css')
+      {{-- Add here extra stylesheets --}}
+      {{-- <link rel="stylesheet" href="/css/admin_custom.css"> --}}
+  @endpush
 
-    {{-- Content body: main page content --}}
-    @section('content_body')
-        <p>Welcome to this beautiful admin panel.</p>
-    @stop
-
-    {{-- Push extra CSS --}}
-    @push('css')
-        {{-- Add here extra stylesheets --}}
-        {{-- <link rel="stylesheet" href="/css/admin_custom.css"> --}}
-    @endpush
-
-    {{-- Push extra scripts --}}
-    @push('js')
-        <script> console.log("Hi, I'm using the Laravel-AdminLTE package!"); </script>
-    @endpush
-    ```
+  {{-- Push extra scripts --}}
+  @push('js')
+      <script> console.log("Hi, I'm using the Laravel-AdminLTE package!"); </script>
+  @endpush
+  ```
 
 - **Output Pratikum 1**
 
@@ -59,281 +59,307 @@
 
 ## Praktikum 2 - Integrasi dengan DataTables
 
-- **Menginstal Yajra DataTables**
+1. **Menginstal Yajra DataTables**
 
-  ```bash
-  composer require laravel/ui --dev
+```bash
+composer require laravel/ui --dev
 
-  composer require yajra/laravel-datatables:^10.0
+composer require yajra/laravel-datatables:^10.0
 
-  npm i laravel-datatables-vite --save-dev
+npm i laravel-datatables-vite --save-dev
 
-  npm install -D sass
+npm install -D sass
+```
+
+- Pastikan nodejs sudah terinstall, dengan perintah npm -v.
+  ![alt text](img/2.1.png)
+
+2. **Langkah Praktikum**
+
+- Edit file resources/js/app.js
+  ```js
+  import "./bootstrap";
+  import "../sass/app.scss";
+  import "laravel-datatables-vite";
+  ```
+- Buatlah file resources/saas/app.scss
+
+  ```scss
+  // Fonts
+  @import url("https://fonts.bunny.net/css?family=Nunito");
+
+  // Bootstrap
+  @import "bootstrap/scss/bootstrap";
+
+  // DataTables
+  @import "bootstrap-icons/font/bootstrap-icons.css";
+  @import "datatables.net-bs5/css/dataTables.bootstrap5.min.css";
+  @import "datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css";
+  @import "datatables.net-select-bs5/css/select.bootstrap5.css";
   ```
 
-- **Membuat KategoriDatable**
+- Edit KategoriDataTable.php
+   <div style="max-height: 350px; overflow-y: auto;">
+
   ```php
-  public function getColumns(): array
+  <?php
+
+  namespace App\DataTables;
+
+  use App\Models\KategoriModel;
+  use Illuminate\Database\Eloquent\Builder as QueryBuilder;
+  use Yajra\DataTables\EloquentDataTable;
+  use Yajra\DataTables\Html\Builder as HtmlBuilder;
+  use Yajra\DataTables\Html\Button;
+  use Yajra\DataTables\Html\Column;
+  use Yajra\DataTables\Html\Editor\Editor;
+  use Yajra\DataTables\Html\Editor\Fields;
+  use Yajra\DataTables\Services\DataTable;
+
+  class KategoriDataTable extends DataTable
   {
-      return [
-          Column::make('kategori_id')->addClass('text-start'),
-          Column::make('kategori_kode'),
-          Column::make('kategori_nama'),
-          Column::make('created_at'),
-          Column::make('updated_at'),
-      ];
+     /**
+     * Build the DataTable class.
+     *
+     * @param QueryBuilder $query Results from query() method.
+     */
+     public function dataTable(QueryBuilder $query): EloquentDataTable
+     {
+        return (new EloquentDataTable($query))
+              ->addColumn('action', 'kategori.action')
+              ->setRowId('id');
+     }
+
+     /**
+     * Get the query source of dataTable.
+     */
+     public function query(KategoriModel $model): QueryBuilder
+     {
+        return $model->newQuery();
+     }
+
+     /**
+     * Optional method if you want to use the html builder.
+     */
+     public function html(): HtmlBuilder
+     {
+        return $this->builder()
+                    ->setTableId('kategori-table')
+                    ->columns($this->getColumns())
+                    ->minifiedAjax()
+                    //->dom('Bfrtip')
+                    ->orderBy(1)
+                    ->selectStyleSingle()
+                    ->buttons([
+                          Button::make('excel'),
+                          Button::make('csv'),
+                          Button::make('pdf'),
+                          Button::make('print'),
+                          Button::make('reset'),
+                          Button::make('reload')
+                    ]);
+     }
+
+     /**
+     * Get the dataTable columns definition.
+     */
+     public function getColumns(): array
+     {
+        return [
+           Column::make('kategori_id'),
+           Column::make('kategori_kode'),
+           Column::make('kategori_nama'),
+           Column::make('created_at'),
+           Column::make('updated_at'),
+        ];
+     }
+
+     /**
+     * Get the filename for export.
+     */
+     protected function filename(): string
+     {
+        return 'Kategori_' . date('YmdHis');
+     }
   }
   ```
 
-3. **Update Model Kategori**
+- Update KategoriModel.php
 
-   ```php
-   class KategoriModel extends Model
-   {
-       use HasFactory;
+  ```php
+  <?php
+  namespace App\Models;
 
-       protected $table = 'm_kategori';
-       protected $primaryKey = 'kategori_id';
+  use Illuminate\Database\Eloquent\Factories\HasFactory;
+  use Illuminate\Database\Eloquent\Model;
+  use Illuminate\Database\Eloquent\Relations\HasMany;
 
-       protected $fillable = ['kategori_kode', 'kategori_nama'];
+  class KategoriModel extends Model
+  {
+     use HasFactory;
 
+     protected $table = 'm_kategori';
+     protected $primaryKey = 'kategori_id';
+     protected $fillable = ['kategori_kode', 'kategori_nama'];
 
-       public function barang(): HasMany
-       {
-           return $this->hasMany(BarangModel::class, 'barang_id', 'barang_id');
-       }
-   }
-   ```
+     public function barang(): HasMany
+     {
+        return $this->hasMany(BarangModel::class, 'barang_id', 'barang_id');
+     }
+  }
+  ```
 
-4. **Ubah Controller Kategori**
+- Update KategoriController.php
 
-   ```php
-   public function index(KategoriDataTable $dataTable)
-   {
-       return $dataTable->render('kategori.index');
-   }
-   ```
+  ```php
+  <?php
 
-5. **Membuat Tabel Data dengan DataTables**
+  namespace App\Http\Controllers;
 
-   - Buat view di `resources/views/kategori/index.blade.php`:
+  use App\DataTables\KategoriDataTable;
+  use Illuminate\Contracts\View\View;
+  use Illuminate\Http\JsonResponse;
 
-   ```php
-   @extends('layout.app')
+  class KategoriController extends Controller
+  {
+     public function index(KategoriDataTable $dataTable): View|JsonResponse
+     {
+        return $dataTable->render('kategori.index');
+     }
+  }
+  ```
 
-       {{-- Customize layout sections --}}
+- Buat view blade index untuk kategori di path `resources/views/kategori/index.blade.php`
 
-       @section('subtitle', 'Kategori')
-       @section('content_header_title', 'Home')
-       @section('content_header_subtitle', 'Kategori')
+  ```php
+  @extends('layouts.app')
 
-       @section('content')
-           <div class="container">
-               <div class="card">
-                   <div class="card-header">Manage Kategori</div>
-                   <div class="card-body">
-                       {{ $dataTable->table() }}
-                   </div>
-               </div>
+  {{-- Customize layout sections --}}
+
+  @section('subtitle', 'Kategori')
+  @section('content_header_title', 'Home')
+  @section('content_header_subtitle', 'Kategori')
+
+  @section('content')
+     <div class="container">
+           <div class="card">
+              <div class="card-header">Manage Kategori</div>
+              <div class="card-body">
+                 {{ $dataTable->table() }}
+              </div>
            </div>
-       @endsection
+     </div>
+  @endsection
 
-       @push('scripts')
-           {{ $dataTable->scripts() }}
-       @endpush
+  @push('scripts')
+     {{ $dataTable->scripts() }}
+  @endpush
+  ```
 
-   @endsection
-   ```
+- Memastikan route kategori sudah tersedia
 
-   - Tambahkan route di `routes/web.php`:
+  ```php
+  Route::get('/kategori', [KategoriController::class, 'index']);
+  ```
 
-   ```php
-   Route::get('/kategori/data', [KategoriController::class, 'data'])->name('kategori.data');
-   ```
+- Menyesuaikan app layout
+  <div style="max-height: 350px; overflow-y: auto;">
 
-   - Hasil
+  ```php
+  @extends('adminlte::page')
+  {{-- Extend and customize the browser title --}}
+  @section('title')
+     {{ config('adminlte.title') }}
+     @hasSection('subtitle')
+        | @yield('subtitle')
+     @endif
+  @stop
+  {{-- Extend and customize the page content header --}}
+  @section('content_header')
+     @hasSection('content_header_title')
+        <h1 class="text-muted">
+              @yield('content_header_title')
+              @hasSection('content_header_subtitle')
+                 <small class="text-dark">
+                    <i class="fas fa-xs fa-angle-right text-muted"></i>
+                    @yield('content_header_subtitle')
+                 </small>
+              @endif
+        </h1>
+     @endif
+  @stop
+  {{-- Rename section content to content_body --}}
+  @section('content')
+     @yield('content_body')
+  @stop
+  {{-- Create a common footer --}}
+  @section('footer')
+     <div class="float-right">
+        Version: {{ config('app.version', '1.0.0') }}
+     </div>
+     <strong>
+        <a href="{{ config('app.company_url', '#') }}">
+              {{ config('app.company_name', 'My company') }}
+        </a>
+     </strong>
+  @stop
+  {{-- Add common Javascript/Jquery code --}}
+  @push('js')
+     <script src="https://cdn.datatables.net/2.0.2/js/dataTables.js"></script>
+  @endpush
 
-   ![alt text](image/image-1.png)
+  @stack('scripts')
+  {{-- Add common CSS customizations --}}
+  @push('css')
+     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.2/css/dataTables.dataTables.css" />
+     <style type="text/css">
+        {{-- You can add AdminLTE customizations here --}}
+        /*
+                          .card-header {
+                          border-bottom: none;
+                          }
+                          .card-title {
+                          font-weight: 600;
+                          }
+                          */
+     </style>
+  @endpush
+  ```
 
-## Praktikum 3 - – Membuat form kemudian menyimpan data dalam database
+- Set ViteJs / script type defaults
 
-1. **Menyesuaikan routing**
+  ```php
+  <?php
 
-   ```php
-   Route::post('/kategori', [KategoriController::class, 'store']);
-   Route::get('/kategori/create', [KategoriController::class, 'create']);
-   ```
+  namespace App\Providers;
 
-2. **Menambahkan 2 function di KategoriController**
+  use Illuminate\Support\ServiceProvider;
+  use Yajra\DataTables\Html\Builder;
 
-   ```php
-   public function create() {
-       return view('kategori.create');
-   }
+  class AppServiceProvider extends ServiceProvider
+  {
+     /**
+     * Register any application services.
+     */
+     public function register(): void
+     {
+        //
+     }
 
-   public function store(Request $request) {
-       KategoriModel::crete([
-           'kategori_kode' => $request->kodeKategori,
-           'kategori_nama' => $request->namaKategori,
-       ]);
-       return redirect('/kategori');
-   }
-   ```
+     /**
+     * Bootstrap any application services.
+     */
+     public function boot(): void
+     {
+        Builder::useVite();
+     }
+  }
+  ```
 
-3. **Membuat form untuk create**
+15. Isikan beberapa data ke table kategori
+    ![alt text](img/2.3.png)
 
-   ```php
-   <form method="post" action="../kategori">
-       <div class="card-body">
-           <div class="form-group">
-               <label for="kodeKategori">Kode Kategori</label>
-               <input type="text" class="form-control" id="kodeKategori" name="kodeKategori" placeholder>
-           </div>
-           <div class="form-group">
-               <label for="namaKategori">Nama Kategori</label>
-               <input type="text" class="form-control" id="namaKategori" name="namaKategori" placeholder>
-           </div>
-       </div>
-       <div class="card-footer">
-           <button type="submit" class="btn btn-primary">Submit</button>
-       </div>
-   </form>
-   ```
-
-   - Hasil
-
-   ![alt text](image/image-2.png)
-
-   ![alt text](image/image-3.png)
-
----
-
-## Tugas Praktikum
-
-1. Tambahkan button Add di halam manage kategori, yang mengarah ke create kategori baru.
-
-   - Menambahkan div untuk tombol add di kategori/index.blade.php
-
-   ```php
-   <div class="d-flex justify-content-between align-items-center p-3">
-       <span>Manage Kategori</span>
-       <a href="{{ route('kategori.create') }}" class="btn btn-primary">Add</a>
-   </div>
-   ```
-
-   - Hasil
-
-   ![alt text](image/image-4.png)
-
-2. Tambahkan menu untuk halaman manage kategori, di daftar menu navbar
-
-   - Menambahkan data di config/adminlte.php
-
-   ```php
-   [
-       'text' => 'Kategori',
-       'url' => 'kategori',
-       'icon' => 'fas fa-tags',
-   ],
-   ```
-
-   - Hasil
-
-   ![alt text](image/image-5.png)
-
-3. Tambahkan action edit di datatables dan buat halaman edit serta controllernya
-
-   - Menambahkan 2 function di Controller
-
-   ```php
-       public function edit($id)
-   {
-       $kategori = KategoriModel::findOrFail($id);
-       return view('kategori.edit', compact('kategori'));
-   }
-
-   public function update(Request $request, $id)
-   {
-       $request->validate([
-           'kodeKategori' => 'required|max:255',
-           'namaKategori' => 'required|max:255',
-       ]);
-
-       $kategori = KategoriModel::findOrFail($id);
-       $kategori->update([
-           'kategori_kode' => $request->kodeKategori,
-           'kategori_nama' => $request->namaKategori,
-       ]);
-
-       return redirect()->route('kategori.index')->with('success', 'Kategori berhasil diperbarui');
-   }
-   ```
-
-   - Menambahkan form edit
-
-   ```php
-   <form action="{{ route('kategori.update', $kategori->kategori_id) }}" method="POST">
-       @csrf
-       @method('PUT')
-
-       <div class="form-group">
-           <label for="kodeKategori">Kode Kategori</label>
-           <input type="text" class="form-control" name="kodeKategori" id="kodeKategori" value="{{ $kategori->kategori_kode }}" required>
-       </div>
-
-       <div class="form-group">
-           <label for="namaKategori">Nama Kategori</label>
-           <input type="text" class="form-control" name="namaKategori" id="namaKategori" value="{{ $kategori->kategori_nama }}" required>
-       </div>
-
-       <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
-   </form>
-   ```
-
-   - Hasil
-
-   ![alt text](image/image-6.png)
-
-   ![alt text](image/image-7.png)
-
-4. Tambahkan action delete di datatables serta controllernya
-
-   - Menambahkan function delete di controller
-
-   ```php
-   public function destroy($id)
-   {
-       $kategori = KategoriModel::findOrFail($id);
-       $kategori->delete();
-
-       return redirect()->route('kategori.index')->with('success', 'Kategori berhasil dihapus');
-   }
-   ```
-
-   - Menambah button di index
-
-   ```php
-   ->addColumn('action', function ($row) {
-       $editUrl = route('kategori.edit', ['id' => $row->kategori_id]);
-       $deleteUrl = route('kategori.destroy', ['id' => $row->kategori_id]);
-
-       return '<a href="'.$editUrl.'" class="btn btn-warning btn-sm">
-                   <i class="fas fa-edit"></i> Edit
-               </a>
-               <form action="'.$deleteUrl.'" method="POST" style="display:inline;" onsubmit="return confirm(\'Apakah Anda yakin ingin menghapus kategori ini?\');">
-                   '.csrf_field().'
-                   '.method_field("DELETE").'
-                   <button type="submit" class="btn btn-danger btn-sm">
-                       <i class="fas fa-trash"></i> Hapus
-                   </button>
-               </form>';
-   })
-   ```
-
-   - Hasil
-
-   ![alt text](image/image-9.png)
-
-   ![alt text](image/image-10.png)
+16. Datatables sudah dapat di load di url `/kategori`
+    ![alt text](img/2.2.png)
 
 ---
