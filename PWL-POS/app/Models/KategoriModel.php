@@ -9,9 +9,12 @@ class KategoriModel extends Model
 {
     use HasFactory;
 
+    protected $table      = 'm_kategori';
+    protected $primaryKey = 'kategori_id';
+    protected $fillable   = ['kategori_kode', 'kategori_nama'];
+
     public function barang(): HasMany
     {
-        // JS4: Praktikum 2.7 / One to Many
         return $this->hasMany(BarangModel::class, 'barang_id', 'barang_id');
     }
 }
