@@ -5,7 +5,8 @@
       <div class="card-header"> 
         <h3 class="card-title"><?php echo e($page->title); ?></h3> 
         <div class="card-tools"> 
-          <a class="btn btn-sm btn-primary mt-1" href="<?php echo e(url('user/create')); ?>">Tambah</a> 
+          <a class="btn btn-sm btn-primary mt-1" href="<?php echo e(url('user/create')); ?>">Tambah</a>
+          <button onclick="modalAction('<?php echo e(url('user/create_ajax')); ?>')" class="btn btn-sm btn-success mt-1">Tambah Ajax</button> 
         </div> 
       </div> 
       <div class="card-body"> 
@@ -38,6 +39,7 @@
       </table> 
     </div> 
   </div> 
+  <div id="myModal" class="modal fade animate shake" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" data-width="75%" aria-hidden="true"></div> 
 <?php $__env->stopSection(); ?> 
  
 <?php $__env->startPush('css'); ?> 
@@ -45,8 +47,15 @@
  
 <?php $__env->startPush('js'); ?> 
   <script> 
+    function modalAction(url = ''){ 
+        $('#myModal').load(url,function(){ 
+            $('#myModal').modal('show'); 
+        }); 
+    }
+
+    var dataUser;
     $(document).ready(function() { 
-      var dataUser = $('#table_user').DataTable({ 
+      dataUser = $('#table_user').DataTable({ 
           // serverSide: true, jika ingin menggunakan server side processing 
           serverSide: true,      
           ajax: { 
@@ -96,5 +105,4 @@
     }); 
   </script> 
 <?php $__env->stopPush(); ?>  
-
 <?php echo $__env->make('layouts.template', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\laragon\www\Pemrograman-Web-Lanjut\Minggu-6\PWL_POS\resources\views/user/index.blade.php ENDPATH**/ ?>
