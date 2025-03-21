@@ -5,8 +5,8 @@
         <div class="card-header">
             <h3 class="card-title"><?php echo e($page->title); ?></h3>
             <div class="card-tools">
-                
-                <button onclick="modalAction('<?php echo e(url('user/create_ajax')); ?>')" class="btn btn-sm btn-primary mt-1">Tambah</button>
+                <a class="btn btn-sm btn-primary mt-1" href="<?php echo e(url('user/create')); ?>">Tambah</a>
+                <button onclick="modalAction('<?php echo e(url('user/create_ajax')); ?>')" class="btn btn-sm btn-primary mt-1">Tambah Ajax</button>
             </div>
         </div>
         <div class="card-body">
