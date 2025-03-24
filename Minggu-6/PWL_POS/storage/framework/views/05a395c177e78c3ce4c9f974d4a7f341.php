@@ -1,32 +1,31 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title><?php echo e(config('app.name', 'PWL Laravel Starter Code')); ?></title>
-
   <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
-
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="<?php echo e(asset('adminlte/plugins/fontawesome-free/css/all.min.css')); ?>">
   <!-- DataTables -->
-  <link rel="stylesheet" href="<?php echo e(asset('adminlte/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css')); ?>">
-  <link rel="stylesheet" href="<?php echo e(asset('adminlte/plugins/datatables-responsive/css/responsive.bootstrap4.min.css')); ?>">
-  <link rel="stylesheet" href="<?php echo e(asset('adminlte/plugins/datatables-buttons/css/buttons.bootstrap4.min.css')); ?>">
+  <link rel="stylesheet" href="<?php echo e(asset('Adminlte/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css')); ?>">
+  <link rel="stylesheet" href="<?php echo e(asset('Adminlte/plugins/datatables-responsive/css/responsive.bootstrap4.min.css')); ?>">
+  <link rel="stylesheet" href="<?php echo e(asset('Adminlte/plugins/datatables-buttons/css/buttons.bootstrap4.min.css')); ?>">
+  <!-- SweetAlert2 -->
+  <link rel="stylesheet" href="<?php echo e(asset('Adminlte/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css')); ?>">
   <!-- Theme style -->
   <link rel="stylesheet" href="<?php echo e(asset('adminlte/dist/css/adminlte.min.css')); ?>">
-
   <?php echo $__env->yieldPushContent('css'); ?>
 </head>
 <body class="hold-transition sidebar-mini">
 <!-- Site wrapper -->
 <div class="wrapper">
   <!-- Navbar -->
-  <?php echo $__env->make('layouts.header', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+    <?php echo $__env->make('layouts.header', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
   <!-- /.navbar -->
+
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
@@ -47,41 +46,53 @@
 
     <!-- Main content -->
     <section class="content">
-      <?php echo $__env->yieldContent('content'); ?> 
+        <?php echo $__env->yieldContent('content'); ?>
+        <div id="myModal" class="modal fade animate shake" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" data-width="75%" aria-hidden="true"></div>
     </section>
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
 
   <?php echo $__env->make('layouts.footer', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
-</div>
+    </div>
 <!-- ./wrapper -->
 
 <!-- jQuery -->
 <script src="<?php echo e(asset('adminlte/plugins/jquery/jquery.min.js')); ?>"></script>
 <!-- Bootstrap 4 -->
 <script src="<?php echo e(asset('adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js')); ?>"></script>
-<!-- DataTables & Plugins -->
-<script src="<?php echo e(asset('adminlte/plugins/datatables/jquery.dataTables.min.js')); ?>"></script>
-<script src="<?php echo e(asset('adminlte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js')); ?>"></script>
-<script src="<?php echo e(asset('adminlte/plugins/datatables-responsive/js/dataTables.responsive.min.js')); ?>"></script>
-<script src="<?php echo e(asset('adminlte/plugins/datatables-responsive/js/responsive.bootstrap4.min.js')); ?>"></script>
-<script src="<?php echo e(asset('adminlte/plugins/datatables-buttons/js/dataTables.buttons.min.js')); ?>"></script>
-<script src="<?php echo e(asset('adminlte/plugins/datatables-buttons/js/buttons.bootstrap4.min.js')); ?>"></script>
-<script src="<?php echo e(asset('adminlte/plugins/jszip/jszip.min.js')); ?>"></script>
-<script src="<?php echo e(asset('adminlte/plugins/pdfmake/pdfmake.min.js')); ?>"></script>
-<script src="<?php echo e(asset('adminlte/plugins/pdfmake/vfs_fonts.js')); ?>"></script>
-<script src="<?php echo e(asset('adminlte/plugins/datatables-buttons/js/buttons.html5.min.js')); ?>"></script>
-<script src="<?php echo e(asset('adminlte/plugins/datatables-buttons/js/buttons.print.min.js')); ?>"></script>
-<script src="<?php echo e(asset('adminlte/plugins/datatables-buttons/js/buttons.colVis.min.js')); ?>"></script>
-<!-- AdminLTE App -->
-<script src="<?php echo e(asset('adminlte/dist/js/adminlte.min.js')); ?>"></script>
+<!--DataTables & Plugins -->
+<script src="<?php echo e(asset('Adminlte/plugins/datatables/jquery.dataTables.min.js')); ?>"></script>
+<script src="<?php echo e(asset('Adminlte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js')); ?>"></script>
+<script src="<?php echo e(asset('Adminlte/plugins/datatables-responsive/js/dataTables.responsive.min.js')); ?>"></script>
+<script src="<?php echo e(asset('Adminlte/plugins/datatables-responsive/js/responsive.bootstrap4.min.js')); ?>"></script>
+<script src="<?php echo e(asset('Adminlte/plugins/datatables-buttons/js/dataTables.buttons.min.js')); ?>"></script>
+<script src="<?php echo e(asset('Adminlte/plugins/datatables-buttons/js/buttons.bootstrap4.min.js')); ?>"></script>
+<script src="<?php echo e(asset('Adminlte/plugins/jszip/jszip.min.js')); ?>"></script>
+<script src="<?php echo e(asset('Adminlte/plugins/pdfmake/pdfmake.min.js')); ?>"></script>
+<script src="<?php echo e(asset('Adminlte/plugins/pdfmake/vfs_fonts.js')); ?>"></script>
+<script src="<?php echo e(asset('Adminlte/plugins/datatables-buttons/js/buttons.html5.min.js')); ?>"></script>
+<script src="<?php echo e(asset('Adminlte/plugins/datatables-buttons/js/buttons.print.min.js')); ?>"></script>
+<script src="<?php echo e(asset('Adminlte/plugins/datatables-buttons/js/buttons.colVis.min.js')); ?>"></script>
+<!-- jquery-validation -->
+<script src="<?php echo e(asset('Adminlte/plugins/jquery-validation/jquery.validate.min.js')); ?>"></script>
+<script src="<?php echo e(asset('Adminlte/plugins/jquery-validation/additional-methods.min.js')); ?>"></script>
+<!-- SweetAlert2 -->
+<script src="<?php echo e(asset('Adminlte/plugins/sweetalert2/sweetalert2.min.js')); ?>"></script>
+<!--AdminLTE App -->
+<script src="<?php echo e(asset('Adminlte/dist/js/adminlte.min.js')); ?>"></script>
 <script>
-  $.ajaxSetup({
-    headers: {
-      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}});
+    $.ajaxSetup({ headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') } });
+</script>
+<script>
+    function modalAction(url = ''){ 
+      $('#myModal').load(url,function(){ 
+          $('#myModal').modal('show'); 
+      }); 
+    }
 </script>
 <?php echo $__env->yieldPushContent('js'); ?>
+<!-- AdminLTE App -->
+<script src="<?php echo e(asset('adminlte/dist/js/adminlte.min.js')); ?>"></script>
 </body>
-</html>
-<?php /**PATH C:\laragon\www\Pemrograman-Web-Lanjut\Minggu-6\PWL_POS\resources\views/layouts/template.blade.php ENDPATH**/ ?>
+</html><?php /**PATH C:\laragon\www\Pemrograman-Web-Lanjut\Minggu-6\PWL_POS\resources\views/layouts/template.blade.php ENDPATH**/ ?>
