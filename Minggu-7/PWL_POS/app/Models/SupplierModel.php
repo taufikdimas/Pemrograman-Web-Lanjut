@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -9,7 +8,14 @@ class SupplierModel extends Model
 {
     use HasFactory;
 
-    protected $table = 'm_supplier';
+    protected $table      = 'm_supplier';
     protected $primaryKey = 'supplier_id';
-    protected $fillable = ['supplier_kode', 'supplier_nama', 'supplier_alamat', 'supplier_telepon'];
+
+    protected $fillable = [
+        'supplier_kode',
+        'supplier_nama',
+        'supplier_alamat',
+        'created_at',
+        'updated_at',
+    ];
 }
