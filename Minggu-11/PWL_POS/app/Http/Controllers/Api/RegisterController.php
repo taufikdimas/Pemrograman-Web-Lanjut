@@ -15,8 +15,8 @@ class RegisterController extends Controller
             'level_id' => 'required',
             'username' => 'required|unique:m_user',
             'nama'     => 'required',
-            'password' => 'required|min:6',
-            'photo'    => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'password' => 'required|min:6|confirmed',
+            'image'    => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         if ($validator->fails()) {
@@ -32,7 +32,13 @@ class RegisterController extends Controller
             'username' => $request->username,
             'nama'     => $request->nama,
             'password' => bcrypt($request->password),
-            'photo'    => $request->hasFile('photo') ? $request->file('photo')->store('images', 'public') : null,
+            'image'    => $request->hasFile('image') ?
+            (function () use ($request) {
+                $file     = $request->file('image');
+                $fileName = $file->hashName();
+                $file->move(public_path('img/user'), $fileName);
+                return 'img/user/' . $fileName;
+            })() : null,
         ]);
 
         //return response JSON user when user is created
