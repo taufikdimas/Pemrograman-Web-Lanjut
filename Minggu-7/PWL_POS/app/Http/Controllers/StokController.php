@@ -5,6 +5,7 @@ use App\Models\BarangModel;
 use App\Models\StokModel;
 use App\Models\UserModel;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -46,7 +47,13 @@ class StokController extends Controller
         }
 
         return DataTables::of($stoks)
+
             ->addIndexColumn()
+        //format tgl
+            ->editColumn('stok_tanggal', function ($stok) {
+                return Carbon::parse($stok->stok_tanggal)->translatedFormat('d F Y');
+            })
+
             ->addColumn('aksi', function ($stok) {
                 $btn = '<button onclick="modalAction(\'' . url('/stok/' . $stok->stok_id . '/show_ajax') . '\')" class="btn btn-info btn-sm">Detail</button> ';
                 $btn .= '<button onclick="modalAction(\'' . url('/stok/' . $stok->stok_id . '/edit_ajax') . '\')" class="btn btn-warning btn-sm">Edit</button> ';
@@ -59,7 +66,6 @@ class StokController extends Controller
 
     public function create_ajax()
     {
-                                                                        // $barang = BarangModel::select('barang_id', 'barang_nama')->get();
         $barangSudahDipakai = StokModel::pluck('barang_id')->toArray(); // barang_id yang sudah ada di stok
         $barang             = BarangModel::whereNotIn('barang_id', $barangSudahDipakai)->get();
         $user               = Auth::user(); // ambil user yang login
@@ -233,18 +239,17 @@ class StokController extends Controller
             $reader->setReadDataOnly(true);
             $spreadsheet = $reader->load($file->getRealPath());
             $sheet       = $spreadsheet->getActiveSheet();
-
-            $data = $sheet->toArray(null, false, true, true);
+            $data        = $sheet->toArray(null, false, true, true);
 
             $insert = [];
             if (count($data) > 1) {
                 foreach ($data as $row => $value) {
                     if ($row > 1) {
                         $insert[] = [
-                            'barang_id'    => $value['A'],
-                            'user_id'      => $value['B'],
-                            'stok_tanggal' => $value['C'],
-                            'stok_jumlah'  => $value['D'],
+                            'barang_id'    => $value['B'], // Pastikan ini ID barang yang valid
+                            'user_id'      => $value['C'], // ID user yang input
+                            'stok_tanggal' => \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($value['D'])->format('Y-m-d H:i:s'),
+                            'stok_jumlah'  => (int) $value['E'],
                             'created_at'   => now(),
                             'updated_at'   => now(),
                         ];

@@ -27,7 +27,6 @@
                                         <option value="{{ $item->user_id }}">{{ $item->nama }}</option>
                                     @endforeach
                                 </select>
-                                <small class="form-text text-muted">List User</small>
                             </div>
                         </div>
                     </div>

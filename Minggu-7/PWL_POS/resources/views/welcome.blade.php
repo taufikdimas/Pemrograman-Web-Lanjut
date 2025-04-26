@@ -7,7 +7,7 @@
         <div class="card-tools"></div>
     </div>
     <div class="card-body">
-        Monggo pinarak rumiyen
+        Selamat datang {{ Auth::user()->nama }}
     </div>
 </div>
 @endsection
