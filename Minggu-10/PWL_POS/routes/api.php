@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\LevelController;
 use App\Http\Controllers\Api\LoginController;
 use App\Http\Controllers\Api\LogoutController;
 use App\Http\Controllers\Api\RegisterController;
@@ -25,4 +26,12 @@ Route::post('/login', LoginController::class)->name('login');
 Route::post('/logout', LogoutController::class)->name('logout');
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+Route::prefix('levels')->group(function () {
+    Route::get('', [LevelController::class, 'index']);
+    Route::post('', [LevelController::class, 'store']);
+    Route::get('{level}', [LevelController::class, 'show']);
+    Route::put('{level}', [LevelController::class, 'update']);
+    Route::delete('{level}', [LevelController::class, 'destroy']);
 });
